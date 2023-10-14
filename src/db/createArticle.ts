@@ -1,4 +1,4 @@
-import Blog from './modal';
+import Blog from '../models/blog';
 
 const createArticle = async () => {
   const article = new Blog({

@@ -1,12 +1,17 @@
+import { GraphQLError } from 'graphql';
 import data from "../db/db";
 
 const { ingredients, courses, meals, mealPlans } = data;
 
-
 const resolvers = {
   Query: {
-    meal: (parent, args) => {
-      return meals.find((meal) => meal.id === args.id);
+    meal: (parent, args, { user }) => {
+      if (user) {
+        return meals.find((meal) => meal.id === args.id);
+      }
+      else {
+        throw new GraphQLError('Not Authenticated', { extensions: { code: 403 } });
+      }
     },
     mealPlans: () => mealPlans,
     mealPlan: (parent, args) => {

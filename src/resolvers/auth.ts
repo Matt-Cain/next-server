@@ -1,15 +1,16 @@
 import { GraphQLError } from 'graphql';
-import { login } from '../auth/login';
+import { login, signUp } from '../auth/authFlow';
 
 const resolvers = {
   Query: {
-    me: (_, __, req) => {
-      if (req.user) return req.user;
+    me: (_, __, { user }) => {
+      if (user) return user;
       else throw new GraphQLError('foo', { extensions: { code: 403 } });
     },
   },
   Mutation: {
     login,
+    signUp
   },
 };
 

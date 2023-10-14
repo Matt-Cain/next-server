@@ -1,8 +1,7 @@
 import { ApolloServer } from "@apollo/server";
-import { startStandaloneServer,  } from "@apollo/server/standalone";
+import { startStandaloneServer } from "@apollo/server/standalone";
 import { GraphQLError } from 'graphql';
 import dotenv from "dotenv";
-
 import initiateDB from "./db/initiate";
 
 import { context } from "./auth/context";

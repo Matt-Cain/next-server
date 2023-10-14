@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"]
+    },
     "rootDirs": ["src"],
     "outDir": "dist",
     "lib": ["es2020"],
