@@ -6,6 +6,7 @@ export const context = async ({ req, res }) => {
   // Note that 'null' may come across the wire as a string
   let accessToken = req.headers["x-access-token"]?.replace(/^null$/, "");
   let refreshToken = req.headers["x-refresh-token"]?.replace(/^null$/, "");
+  console.log({ accessToken, refreshToken });
 
   let user = null;
 
@@ -23,6 +24,7 @@ export const context = async ({ req, res }) => {
            * requiring a separate GraphQL query request */
           id = tokenUser.id;
           ({ accessToken, refreshToken } = setTokens(tokenUser));
+          console.log('refreshed tokens');
           res.set("x-access-token", accessToken);
           res.set("x-refresh-token", refreshToken);
         }

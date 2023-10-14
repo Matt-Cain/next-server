@@ -3,12 +3,15 @@ import { startStandaloneServer,  } from "@apollo/server/standalone";
 import { GraphQLError } from 'graphql';
 import dotenv from "dotenv";
 
+import initiateDB from "./db/initiate";
+
 import { context } from "./auth/context";
 
 import typeDefs from "./typeDefs";
 import resolvers from "./resolvers";
 
 dotenv.config();
+initiateDB();
 
 const server = new ApolloServer({
   typeDefs,
