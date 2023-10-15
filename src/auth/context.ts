@@ -1,6 +1,6 @@
 import { setTokens, validateAccessToken, validateRefreshToken } from "./jwt";
 
-import { findUserById } from "../db/users";
+import { findUserById } from "@/actions/users"
 
 export const context = async ({ req, res }) => {
   // Note that 'null' may come across the wire as a string

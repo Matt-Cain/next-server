@@ -5,6 +5,7 @@ import { createUser, findUserByEmail } from '@/actions/users';
 
 export const login = async (_: any, { email, password }) => {
   const user = await findUserByEmail(email);
+  console.log({ user });
   if (user && (await comparePromise(password, user.hash)))
     return setTokens(user);
   else

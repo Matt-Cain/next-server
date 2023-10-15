@@ -13,11 +13,16 @@ const resolvers = {
         throw new GraphQLError('Not Authenticated', { extensions: { code: 403 } });
       }
     },
-    mealPlans: () => mealPlans,
+    mealPlans: () => [],
     mealPlan: (parent, args) => {
       return mealPlans.find((mealPlan) => mealPlan.id === args.id);
     },
   },
+  Mutation: {
+    createMealPlan: (parent, args) => {
+      console.log(parent, args);
+    }
+  }
 };
 
 export default resolvers;

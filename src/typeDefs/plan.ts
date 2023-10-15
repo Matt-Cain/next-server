@@ -23,7 +23,8 @@ const mealPlanTypeDefs = `#graphql
 
   type MealPlan {
     id: ID!
-    range: [String]
+    startDate: Date
+    endDate: Date
     meals: [Meal]
   }
 
@@ -31,6 +32,14 @@ const mealPlanTypeDefs = `#graphql
     meal(id: ID!): Meal
     mealPlan(id: ID!): MealPlan
     mealPlans: [MealPlan]
+  }
+
+  input MealPlanInput {
+    range: [Date]
+  }
+
+  type Mutation {
+    createMealPlan(startDate: Date!, endDate: Date!): MealPlan
   }
 
 `;
