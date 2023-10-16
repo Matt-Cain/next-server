@@ -1,5 +1,6 @@
 import { GraphQLError } from 'graphql';
 import data from "../db/db";
+import { createPlan, getPlans } from '@/actions/plans';
 
 const { ingredients, courses, meals, mealPlans } = data;
 
@@ -13,15 +14,11 @@ const resolvers = {
         throw new GraphQLError('Not Authenticated', { extensions: { code: 403 } });
       }
     },
-    mealPlans: () => [],
-    mealPlan: (parent, args) => {
-      return mealPlans.find((mealPlan) => mealPlan.id === args.id);
-    },
+    getPlan: () => null,
+    getPlans,
   },
   Mutation: {
-    createMealPlan: (parent, args) => {
-      console.log(parent, args);
-    }
+    createPlan
   }
 };
 

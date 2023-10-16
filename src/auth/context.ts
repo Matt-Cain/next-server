@@ -6,7 +6,6 @@ export const context = async ({ req, res }) => {
   // Note that 'null' may come across the wire as a string
   let accessToken = req.headers["x-access-token"]?.replace(/^null$/, "");
   let refreshToken = req.headers["x-refresh-token"]?.replace(/^null$/, "");
-  console.log({ accessToken, refreshToken });
 
   let user = null;
 
@@ -35,7 +34,7 @@ export const context = async ({ req, res }) => {
     }
     /* if we've found an authenticated user, add the user object to req for access by resolvers via req.user
      * this includes *all* the user's fields but none of this goes back to the client unless requested via a graphql query */
-    if (id) user = findUserById(id);
+    if (id) user = await findUserById(id);
   }
   return { req, res, user };
 };
