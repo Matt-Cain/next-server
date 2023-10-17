@@ -17,25 +17,31 @@ const mealPlanTypeDefs = `#graphql
   type Meal {
     id: ID!
     name: String
-    day: Int
     courses: [Course]
+  }
+
+  type MealPlan {
+    id: ID!
+    day: Int
+    meal: Meal
   }
 
   type Plan {
     id: ID!
     startDate: Date
     endDate: Date
-    meals: [Meal]
+    meals: [MealPlan]
   }
 
   type Query {
-    meal(id: ID!): Meal
+    getMeal(mealPlanId: ID!): MealPlan
     getPlan(id: ID!): Plan
     getPlans(startDate: Date!, endDate: Date!): [Plan]
   }
 
   type Mutation {
     createPlan(startDate: Date!, endDate: Date!): Plan
+    createMealPlan(planId: ID!, day: Int!): MealPlan
   }
 
 `;

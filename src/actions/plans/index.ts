@@ -1,9 +1,9 @@
 import Plan from "@/models/plan";
+import MealPlan from "@/models/mealPlan";
 
 export const createPlan = async (_parent, params, context) => {
   const { startDate, endDate } = params;
   const { user } = context;
-  console.log(Plan, startDate, endDate, user);
 
   const plan = new Plan({
     startDate,
@@ -16,13 +16,28 @@ export const createPlan = async (_parent, params, context) => {
   return plan;
 };
 
+export const createMealPlan = async (_parent, params, context) => {
+  const { planId, day } = params;
+
+  const mealPlan = new MealPlan({
+    plan: planId,
+    day
+  });
+
+  await mealPlan.save();
+
+  await Plan.findByIdAndUpdate(
+    planId,
+    { $push: { meals: mealPlan.id } },
+    { new: true }
+  );
+
+  return mealPlan;
+}
+
 export const getPlans = async (_parent, params, context) => {
   const { user } = context;
   const { startDate, endDate } = params;
-
-  // start and end date are for the whole month where a plan's start and end date are within one week
-  // use the start and end date to find all plans that are within the month
-  // use the user id to only include plans for that user
 
   const plans = await Plan.find({
     startDate: { $gte: startDate },
@@ -30,24 +45,27 @@ export const getPlans = async (_parent, params, context) => {
     user: user.id
   });
 
-  console.log(plans);
   return plans;
 }
 
-// export const findUserByEmail = async (emailParam) => {
-//   const user = await User.findOne({ email: emailParam });
-//   if (!user) return null;
+export const getPlan = async (_parent, params, context) => {
+  const { user } = context;
+  const { id } = params;
 
-//   const { _id: id, email, hash } = user;
+  const plan = await Plan.findById(id);
+  await plan.populate('meals');
 
-//   return { id, email, hash };
-// }
+  return plan;
+}
 
-// export const findUserById = async (idParam) => {
-//   const user = await User.findById(idParam);
-//   if (!user) return null;
+export const getMeal = async (_parent, params, context) => {
+  const { user } = context;
+  const { mealPlanId } = params;
 
-//   const { _id: id, email, hash } = user;
+  const mealPlan = await MealPlan.findById(mealPlanId);
+  await mealPlan.populate('meals');
 
-//   return { id, email, hash };
-// }
+  console.log({ mealPlanId, mealPlan });
+
+  return mealPlan;
+}

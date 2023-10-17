@@ -1,11 +1,11 @@
 import { Schema, model } from 'mongoose';
 import normalize from 'normalize-mongoose';
-import User from './user';
 
 const planSchema = new Schema({
   startDate: { type: String, required: true },
   endDate: { type: String, required: true },
-  user: { type: Schema.Types.ObjectId, ref: User, required: true }
+  meals: [{ type: Schema.Types.ObjectId, ref: 'MealPlan' }],
+  user: { type: Schema.Types.ObjectId, ref: 'User', required: true }
 });
 
 planSchema.plugin(normalize);
