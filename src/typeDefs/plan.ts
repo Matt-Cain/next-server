@@ -43,7 +43,6 @@ const mealPlanTypeDefs = `#graphql
     createPlan(startDate: Date!, endDate: Date!): Plan
     createMealPlan(planId: ID!, day: Int!): MealPlan
   }
-
 `;
 
 export default mealPlanTypeDefs;

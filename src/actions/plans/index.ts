@@ -1,14 +1,31 @@
 import Plan from "@/models/plan";
 import MealPlan from "@/models/mealPlan";
+import { Types } from "mongoose";
 
-export const createPlan = async (_parent, params, context) => {
+type Context = {
+  user: {
+    id: Types.ObjectId;
+    email: string;
+    hash: string;
+  };
+};
+
+type createPlanParams = {
+  startDate: string;
+  endDate: string;
+};
+export const createPlan = async (
+  _parent: any,
+  params: createPlanParams,
+  context: Context
+) => {
   const { startDate, endDate } = params;
   const { user } = context;
 
   const plan = new Plan({
     startDate,
     endDate,
-    user: user.id
+    user: user.id,
   });
 
   await plan.save();
@@ -16,12 +33,19 @@ export const createPlan = async (_parent, params, context) => {
   return plan;
 };
 
-export const createMealPlan = async (_parent, params, context) => {
+type createMealPlanParams = {
+  planId: string;
+  day: string;
+};
+export const createMealPlan = async (
+  _parent: any,
+  params: createMealPlanParams
+) => {
   const { planId, day } = params;
 
   const mealPlan = new MealPlan({
     plan: planId,
-    day
+    day,
   });
 
   await mealPlan.save();
@@ -33,39 +57,57 @@ export const createMealPlan = async (_parent, params, context) => {
   );
 
   return mealPlan;
-}
+};
 
-export const getPlans = async (_parent, params, context) => {
+type addMealToPlanParams = {
+  startDate: string;
+  endDate: string;
+};
+export const getPlans = async (
+  _parent: any,
+  params: addMealToPlanParams,
+  context: Context
+) => {
   const { user } = context;
   const { startDate, endDate } = params;
 
   const plans = await Plan.find({
     startDate: { $gte: startDate },
     endDate: { $lte: endDate },
-    user: user.id
+    user: user.id,
   });
 
   return plans;
-}
+};
 
-export const getPlan = async (_parent, params, context) => {
-  const { user } = context;
+type getPlansParams = {
+  id: string;
+};
+export const getPlan = async (
+  _parent: any,
+  params: getPlansParams,
+  context: Context
+) => {
   const { id } = params;
 
   const plan = await Plan.findById(id);
-  await plan.populate('meals');
+  await plan?.populate("meals");
 
   return plan;
-}
+};
 
-export const getMeal = async (_parent, params, context) => {
-  const { user } = context;
+type getMealParams = {
+  mealPlanId: string;
+};
+export const getMeal = async (
+  _parent: any,
+  params: getMealParams,
+  context: Context
+) => {
   const { mealPlanId } = params;
 
   const mealPlan = await MealPlan.findById(mealPlanId);
-  await mealPlan.populate('meals');
-
-  console.log({ mealPlanId, mealPlan });
+  await mealPlan?.populate("meals");
 
   return mealPlan;
-}
+};
