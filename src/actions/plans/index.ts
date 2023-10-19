@@ -1,6 +1,6 @@
-import Plan from "@/models/plan";
-import MealPlan from "@/models/mealPlan";
-import { Types } from "mongoose";
+import { Types } from 'mongoose';
+import Plan from '../../models/plan';
+import MealPlan from '../../models/mealPlan';
 
 type Context = {
   user: {
@@ -10,14 +10,14 @@ type Context = {
   };
 };
 
-type createPlanParams = {
+type CreatePlanParams = {
   startDate: string;
   endDate: string;
 };
 export const createPlan = async (
   _parent: any,
-  params: createPlanParams,
-  context: Context
+  params: CreatePlanParams,
+  context: Context,
 ) => {
   const { startDate, endDate } = params;
   const { user } = context;
@@ -33,13 +33,13 @@ export const createPlan = async (
   return plan;
 };
 
-type createMealPlanParams = {
+type CreateMealPlanParams = {
   planId: string;
   day: string;
 };
 export const createMealPlan = async (
   _parent: any,
-  params: createMealPlanParams
+  params: CreateMealPlanParams,
 ) => {
   const { planId, day } = params;
 
@@ -53,20 +53,20 @@ export const createMealPlan = async (
   await Plan.findByIdAndUpdate(
     planId,
     { $push: { meals: mealPlan.id } },
-    { new: true }
+    { new: true },
   );
 
   return mealPlan;
 };
 
-type addMealToPlanParams = {
+type AddMealToPlanParams = {
   startDate: string;
   endDate: string;
 };
 export const getPlans = async (
   _parent: any,
-  params: addMealToPlanParams,
-  context: Context
+  params: AddMealToPlanParams,
+  context: Context,
 ) => {
   const { user } = context;
   const { startDate, endDate } = params;
@@ -80,34 +80,34 @@ export const getPlans = async (
   return plans;
 };
 
-type getPlansParams = {
+type GetPlansParams = {
   id: string;
 };
 export const getPlan = async (
   _parent: any,
-  params: getPlansParams,
-  context: Context
+  params: GetPlansParams,
+  context: Context,
 ) => {
   const { id } = params;
 
   const plan = await Plan.findById(id);
-  await plan?.populate("meals");
+  await plan?.populate('meals');
 
   return plan;
 };
 
-type getMealParams = {
+type GetMealParams = {
   mealPlanId: string;
 };
 export const getMeal = async (
   _parent: any,
-  params: getMealParams,
-  context: Context
+  params: GetMealParams,
+  context: Context,
 ) => {
   const { mealPlanId } = params;
 
   const mealPlan = await MealPlan.findById(mealPlanId);
-  await mealPlan?.populate("meals");
+  await mealPlan?.populate('meals');
 
   return mealPlan;
 };

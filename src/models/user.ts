@@ -3,7 +3,7 @@ import normalize from 'normalize-mongoose';
 
 const userSchema = new Schema({
   email: { type: String, required: true, unique: true },
-  hash: { type: String, required: true }
+  hash: { type: String, required: true },
 });
 
 userSchema.plugin(normalize);

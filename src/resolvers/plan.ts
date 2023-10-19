@@ -1,5 +1,11 @@
-import data from "../db/db";
-import { createPlan, createMealPlan, getPlans, getPlan, getMeal } from '@/actions/plans';
+import data from '../db/db';
+import {
+  createPlan,
+  createMealPlan,
+  getPlans,
+  getPlan,
+  getMeal,
+} from '../actions/plans';
 
 const resolvers = {
   Query: {
@@ -9,8 +15,8 @@ const resolvers = {
   },
   Mutation: {
     createPlan,
-    createMealPlan
-  }
+    createMealPlan,
+  },
 };
 
 export default resolvers;

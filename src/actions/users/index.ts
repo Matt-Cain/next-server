@@ -1,15 +1,16 @@
-import User from "@/models/user";
+import User from '../../models/user';
 
-type createUserParams = {
+type CreateUserParams = {
   email: string;
   hash: string;
 };
-export const createUser = async ({ email, hash }: createUserParams) => {
+export const createUser = async ({ email, hash }: CreateUserParams) => {
   const user = new User({ email, hash });
 
   await user.save();
 
-  return { id: user._id, ...user };
+  const { _id: id } = user;
+  return { id, ...user };
 };
 
 export const findUserByEmail = async (emailParam: string) => {
@@ -21,7 +22,7 @@ export const findUserByEmail = async (emailParam: string) => {
   return { id, email, hash };
 };
 
-export const findUserById = async (idParam: string) => {
+export const findUserById = async (idParam: any) => {
   const user = await User.findById(idParam);
   if (!user) return null;
 
