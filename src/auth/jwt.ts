@@ -21,7 +21,6 @@ export const setTokens = (id: any) => {
   const refreshToken = sign(user, process.env.REFRESH_TOKEN_SECRET as string, {
     expiresIn: process.env.REFRESH_TOKEN_DURATION,
   });
-  console.log({ accessToken, refreshToken });
   return { id, accessToken, refreshToken };
 };
 

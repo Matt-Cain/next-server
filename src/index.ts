@@ -1,9 +1,5 @@
-import { ApolloServer, ContextFunction } from '@apollo/server';
-import {
-  startStandaloneServer,
-  StartStandaloneServerOptions,
-} from '@apollo/server/standalone';
-import { GraphQLError } from 'graphql';
+import { ApolloServer } from '@apollo/server';
+import { startStandaloneServer } from '@apollo/server/standalone';
 import dotenv from 'dotenv';
 import { Types } from 'mongoose';
 import initiateDB from './db/initiate';

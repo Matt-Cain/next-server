@@ -11,13 +11,19 @@ export const context = async ({ req, res }: Context) => {
   let refreshToken = req.headers['x-refresh-token']?.replace(/^null$/, '');
 
   let user = null;
+  let userId = null;
 
   if (accessToken) {
     const decodedAccessToken = validateAccessToken(accessToken) as JwtPayload;
-    const { user: userObject } = (decodedAccessToken as { user: User }) || {};
-    const { id } = userObject || { id: null };
+    const {
+      user: {
+        id: { id },
+      },
+    } = decodedAccessToken;
 
-    if (!id) {
+    userId = id;
+
+    if (!userId) {
       // access token may have expired so check the refresh token
       if (refreshToken) {
         const { user: tokenUser } = validateRefreshToken(
@@ -28,11 +34,14 @@ export const context = async ({ req, res }: Context) => {
           /* refresh the tokens and make them available through headers to the client
            * this allows the client to transparently get refreshed headers without
            * requiring a separate GraphQL query request */
-          // id = tokenUser.id;
+          userId = tokenUser.id;
           ({ accessToken, refreshToken } = setTokens(tokenUser));
-          console.log('refreshed tokens');
-          res.set('x-access-token', accessToken);
-          res.set('x-refresh-token', refreshToken);
+          res.append(
+            'Access-Control-Expose-Headers',
+            'x-access-token,x-refresh-token',
+          );
+          res.header('x-access-token', accessToken);
+          res.header('x-refresh-token', refreshToken);
         }
       } else
         console.info(
@@ -41,8 +50,9 @@ export const context = async ({ req, res }: Context) => {
     }
     /* if we've found an authenticated user, add the user object to req for access by resolvers via req.user
      * this includes *all* the user's fields but none of this goes back to the client unless requested via a graphql query */
-    if (id) user = await findUserById(id);
-    console.log('user', user);
+    if (userId) {
+      user = await findUserById(userId);
+    }
   }
   return { req, res, user };
 };
