@@ -34,7 +34,7 @@ const mealPlanTypeDefs = `#graphql
   }
 
   type Query {
-    getMeal(mealPlanId: ID!): MealPlan
+    getMealPlan(mealPlanId: ID!): MealPlan
     getPlan(id: ID!): Plan
     getPlans(startDate: Date!, endDate: Date!): [Plan]
   }

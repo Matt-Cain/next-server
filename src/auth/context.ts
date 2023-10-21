@@ -19,7 +19,7 @@ export const context = async ({ req, res }: Context) => {
       user: {
         id: { id },
       },
-    } = decodedAccessToken;
+    } = decodedAccessToken || { user: { id: { id: null } } };
 
     userId = id;
 

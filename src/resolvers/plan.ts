@@ -4,12 +4,12 @@ import {
   createMealPlan,
   getPlans,
   getPlan,
-  getMeal,
+  getMealPlan,
 } from '../actions/plans';
 
 const resolvers = {
   Query: {
-    getMeal,
+    getMealPlan,
     getPlan,
     getPlans,
   },

@@ -99,7 +99,7 @@ export const getPlan = async (
 type GetMealParams = {
   mealPlanId: string;
 };
-export const getMeal = async (
+export const getMealPlan = async (
   _parent: any,
   params: GetMealParams,
   context: Context,
@@ -107,7 +107,7 @@ export const getMeal = async (
   const { mealPlanId } = params;
 
   const mealPlan = await MealPlan.findById(mealPlanId);
-  await mealPlan?.populate('meals');
+  await mealPlan?.populate('meal');
 
   return mealPlan;
 };
