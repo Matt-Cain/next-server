@@ -3,7 +3,9 @@ import normalize from 'normalize-mongoose';
 
 const mealSchema = new Schema({
   name: { type: String, required: true },
-  user: { type: Schema.Types.ObjectId, ref: 'User', required: true }
+  entree: { type: Schema.Types.ObjectId, ref: 'Course' },
+  sides: [{ type: Schema.Types.ObjectId, ref: 'Course' }],
+  user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
 });
 
 mealSchema.plugin(normalize);

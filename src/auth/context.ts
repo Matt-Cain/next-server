@@ -15,27 +15,26 @@ export const context = async ({ req, res }: Context) => {
 
   if (accessToken) {
     const decodedAccessToken = validateAccessToken(accessToken) as JwtPayload;
-    const {
-      user: {
-        id: { id },
-      },
-    } = decodedAccessToken || { user: { id: { id: null } } };
+    const accessTokenUserId = decodedAccessToken?.user?.id;
 
-    userId = id;
+    userId = accessTokenUserId;
 
     if (!userId) {
       // access token may have expired so check the refresh token
       if (refreshToken) {
-        const { user: tokenUser } = validateRefreshToken(
+        const decodedRefreshToken = validateRefreshToken(
           refreshToken,
         ) as JwtPayload;
 
-        if (tokenUser) {
+        const refreshTokenUserId = decodedRefreshToken?.user?.id;
+        console.log({ refreshTokenUserId, decodedRefreshToken });
+
+        if (refreshTokenUserId) {
           /* refresh the tokens and make them available through headers to the client
            * this allows the client to transparently get refreshed headers without
            * requiring a separate GraphQL query request */
-          userId = tokenUser.id;
-          ({ accessToken, refreshToken } = setTokens(tokenUser));
+          userId = refreshTokenUserId;
+          ({ accessToken, refreshToken } = setTokens(refreshTokenUserId));
           res.append(
             'Access-Control-Expose-Headers',
             'x-access-token,x-refresh-token',

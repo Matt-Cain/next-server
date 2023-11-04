@@ -1,10 +1,16 @@
-import data from '../db/db';
 import {
+  createCourse,
   createPlan,
   createMealPlan,
+  createMeal,
   getPlans,
   getPlan,
   getMealPlan,
+  getCourses,
+  getCourse,
+  updateCourse,
+  deleteCourse,
+  updateMeal,
 } from '../actions/plans';
 
 const resolvers = {
@@ -12,10 +18,17 @@ const resolvers = {
     getMealPlan,
     getPlan,
     getPlans,
+    getCourses,
+    getCourse,
   },
   Mutation: {
     createPlan,
     createMealPlan,
+    createCourse,
+    createMeal,
+    updateMeal,
+    updateCourse,
+    deleteCourse,
   },
 };
 
