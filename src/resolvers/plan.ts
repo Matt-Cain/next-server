@@ -1,34 +1,22 @@
 import {
-  createCourse,
   createPlan,
-  createMealPlan,
-  createMeal,
-  getPlans,
+  deletePlan,
   getPlan,
-  getMealPlan,
-  getCourses,
-  getCourse,
-  updateCourse,
-  deleteCourse,
-  updateMeal,
-} from '../actions/plans';
+  getPlans,
+  swapDates,
+  updatePlan,
+} from '../actions/plan';
 
 const resolvers = {
   Query: {
-    getMealPlan,
     getPlan,
     getPlans,
-    getCourses,
-    getCourse,
   },
   Mutation: {
     createPlan,
-    createMealPlan,
-    createCourse,
-    createMeal,
-    updateMeal,
-    updateCourse,
-    deleteCourse,
+    deletePlan,
+    swapDates,
+    updatePlan,
   },
 };
 

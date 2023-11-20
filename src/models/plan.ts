@@ -1,21 +1,27 @@
-import { Schema, model, Model, Types } from 'mongoose';
+import { Schema, model, PopulatedDoc, Document, ObjectId } from 'mongoose';
 import normalize from 'normalize-mongoose';
 
+import Course from './course';
+
 interface IPlan {
-  startDate: string;
-  endDate: string;
-  mealPlans: Types.ObjectId[];
-  user: Types.ObjectId;
+  entree?: PopulatedDoc<Document<ObjectId> & typeof Course>;
+  isPlaceholder: boolean;
+  name: string;
+  sides: PopulatedDoc<Document<ObjectId> & typeof Course>[];
+  timestamp: Date;
+  user: string;
 }
 
-const planSchema = new Schema({
-  startDate: { type: String, required: true },
-  endDate: { type: String, required: true },
-  mealPlans: [{ type: Schema.Types.ObjectId, ref: 'MealPlan' }],
+const PlanSchema = new Schema({
+  entree: { type: Schema.Types.ObjectId, ref: 'Course' },
+  isPlaceholder: { type: Boolean },
+  name: { type: String },
+  sides: [{ type: Schema.Types.ObjectId, ref: 'Course' }],
+  timestamp: { type: Date, required: true },
   user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
 });
 
-planSchema.plugin(normalize);
+PlanSchema.plugin(normalize);
 
-const Plan: Model<IPlan> = model('Plan', planSchema);
+const Plan = model<IPlan>('Plan', PlanSchema);
 export default Plan;

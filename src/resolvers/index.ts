@@ -1,8 +1,10 @@
 import { mergeResolvers } from '@graphql-tools/merge';
 import auth from './auth';
-// import date from './date';
+import course from './course';
+import date from './date';
 import plan from './plan';
+import shopping from './shopping';
 
-const resolvers = mergeResolvers([auth, plan]) as any;
+const resolvers = mergeResolvers([auth, course, date, plan, shopping]) as any;
 
 export default resolvers;

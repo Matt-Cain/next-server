@@ -1,6 +1,19 @@
 import { Schema, model } from 'mongoose';
 import normalize from 'normalize-mongoose';
 
+interface ICourse {
+  name: string;
+  type: string;
+  recipe?: string;
+  ingredients: {
+    name: string;
+    quantity: number;
+    unit: string;
+  }[];
+
+  user: any;
+}
+
 const ingredient = {
   name: { type: String, required: true },
   quantity: { type: Number, required: true },
@@ -18,5 +31,5 @@ const courseSchema = new Schema({
 
 courseSchema.plugin(normalize);
 
-const Course = model('Course', courseSchema);
+const Course = model<ICourse>('Course', courseSchema);
 export default Course;
