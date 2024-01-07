@@ -8,6 +8,11 @@ type Auth = {
   password: string;
 };
 
+export const me = async (_: any, __: any, { user }: any) => {
+  console.log({ user });
+  return user;
+};
+
 export const login = async (_: any, { email, password }: Auth) => {
   const user = await findUserByEmail(email);
   if (user && (await comparePromise(password, user.hash)))

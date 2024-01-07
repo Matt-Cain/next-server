@@ -20,7 +20,7 @@ const mealPlanTypeDefs = `#graphql
   }
 
   type Mutation {
-    createPlan(timestamp: Date!, isPlaceholder: Boolean, name: String): Boolean
+    createPlan(timestamp: Date!, isPlaceholder: Boolean, name: String): Plan
 
     deletePlan(id: ID!): Boolean
 

@@ -1,8 +1,11 @@
-import { getShoppingList } from '../actions/shopping';
+import { getShoppingList, addItemToInventory } from '../actions/shopping';
 
 const resolvers = {
   Query: {
     getShoppingList,
+  },
+  Mutation: {
+    addItemToInventory,
   },
 };
 

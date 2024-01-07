@@ -31,8 +31,8 @@ export const createPlan = async (
   });
 
   await plan.save();
-  console.log({ plan });
-  return Boolean(plan);
+
+  return plan;
 };
 
 export const updatePlan = async (
@@ -43,9 +43,12 @@ export const updatePlan = async (
   const { user } = context;
   const { id, ...rest } = params;
 
+  console.log({ id, ...rest });
+
   const plan = await Plan.findOneAndUpdate({ _id: id, user: user.id }, rest, {
     new: true,
   });
+  console.log({ plan });
 
   return Boolean(plan);
 };
@@ -91,7 +94,7 @@ export const getPlan = async (
   const plan = await Plan.findOne({ _id: id, user: user.id }).populate(
     'entree sides',
   );
-  console.log({ plan });
+  console.log('hello', { plan });
 
   return plan;
 };

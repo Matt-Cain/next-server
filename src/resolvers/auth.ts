@@ -1,7 +1,7 @@
-import { GraphQLError } from "graphql";
-import { login, signUp } from "../auth/authFlow";
+import { login, me, signUp } from '../auth/authFlow';
 
 const resolvers = {
+  Query: { me },
   Mutation: {
     login,
     signUp,

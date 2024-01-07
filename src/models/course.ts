@@ -1,30 +1,20 @@
 import { Schema, model } from 'mongoose';
 import normalize from 'normalize-mongoose';
+import Item from './item';
 
 interface ICourse {
   name: string;
   type: string;
   recipe?: string;
-  ingredients: {
-    name: string;
-    quantity: number;
-    unit: string;
-  }[];
-
+  ingredients: any;
   user: any;
 }
-
-const ingredient = {
-  name: { type: String, required: true },
-  quantity: { type: Number, required: true },
-  unit: { type: String, required: true },
-};
 
 const courseSchema = new Schema({
   name: { type: String, required: true },
   type: { type: String, required: true },
   recipe: { type: String },
-  ingredients: [ingredient],
+  ingredients: [{ type: Schema.Types.ObjectId, ref: Item }],
 
   user: { type: Schema.Types.ObjectId, ref: 'User', required: true },
 });

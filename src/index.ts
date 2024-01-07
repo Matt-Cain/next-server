@@ -3,6 +3,7 @@ import { startStandaloneServer } from '@apollo/server/standalone';
 import dotenv from 'dotenv';
 import { Types } from 'mongoose';
 import initiateDB from './db/initiate';
+import { getPort } from './utils/port';
 
 import { context } from './auth/context';
 
@@ -24,7 +25,7 @@ const server = new ApolloServer<AuthContext>({
 
 const { url } = await startStandaloneServer(server, {
   context,
-  listen: { port: parseInt(process.env.PORT as string, 10) },
+  listen: { port: getPort() },
 });
 
 console.log(`🚀  Server ready at: ${url}`);

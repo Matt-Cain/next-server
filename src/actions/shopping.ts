@@ -2,6 +2,7 @@ import { GraphQLError } from 'graphql';
 import { Types } from 'mongoose';
 import Plan from '../models/plan';
 import Course from '../models/course';
+import Inventory from '../models/inventory';
 
 type Context = {
   user: {
@@ -9,6 +10,11 @@ type Context = {
     email: string;
     hash: string;
   };
+};
+
+const SHOPPING_ITEM_TYPES = {
+  shopping: 'shoppingItems',
+  ingredient: 'ingredients',
 };
 
 export const getShoppingList = async (
@@ -22,9 +28,14 @@ export const getShoppingList = async (
   const plans = await Plan.find({
     timestamp: { $gte: startDate, $lte: endDate },
     user: user.id,
-  }).populate('entree sides');
+  }).populate({
+    path: 'entree',
+    populate: {
+      path: 'ingredients',
+    },
+  });
 
-  const unorderedPlans = plans.reduce((acc, plan) => {
+  const unorderedIngredients = plans.reduce((acc, plan) => {
     if (plan?.entree instanceof Course) {
       acc.push(...plan.entree.ingredients);
     }
@@ -37,10 +48,54 @@ export const getShoppingList = async (
     return acc;
   }, [] as any[]);
 
-  const sortedPlans = unorderedPlans.sort((a, b) => {
+  const inventory = await Inventory.findOne({
+    timestamp: { $gte: startDate, $lte: endDate },
+    user: user.id,
+  });
+
+  const inventoryIngredients = inventory?.ingredients || [];
+
+  const filteredIngredients = unorderedIngredients.filter(
+    (ingredient: any) =>
+      !inventoryIngredients.find(({ item }) => {
+        return item?.equals(ingredient._id);
+      }),
+  );
+
+  const sortedIngredients = filteredIngredients.sort((a, b) => {
     if (a.name < b.name) return -1;
     return 1;
   });
 
-  return sortedPlans;
+  return sortedIngredients;
+};
+
+type AddItemToInventoryParams = {
+  id: Types.ObjectId;
+  type: keyof typeof SHOPPING_ITEM_TYPES;
+  timestamp: Date;
+  status: string;
+};
+
+export const addItemToInventory = async (
+  _parent: any,
+  params: AddItemToInventoryParams,
+  context: Context,
+) => {
+  const { user } = context;
+  const { id, type, timestamp, status } = params;
+
+  const keyType = SHOPPING_ITEM_TYPES[type];
+
+  const inventory = await Inventory.findOneAndUpdate(
+    { user: user.id, timestamp },
+    {
+      $push: {
+        [keyType]: { item: id, type: keyType, status },
+      },
+    },
+    { new: true, upsert: true },
+  );
+
+  return Boolean(inventory);
 };

@@ -1,12 +1,14 @@
 const courseTypeDefs = `#graphql
 
   type Ingredient {
+    id: ID
     name: String
     quantity: Int
     unit: String
   }
 
   input IngredientInput {
+    id: ID
     name: String
     quantity: Int
     unit: String
